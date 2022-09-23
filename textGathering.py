@@ -19,7 +19,7 @@ for case in cases:
   soup = BeautifulSoup(raw_html, 'html.parser')
   pTags = soup.find_all('p')
   text = ((' '.join([" ".join(p.text.split()) for p in pTags])).replace('\n', ' ')).replace('\t', ' ')
-  case['full_text'] = text
+  
   #print(text)
   try:
     case['judge'] = soup.find('div', {'class': 'doc_bench'}).text
@@ -28,6 +28,8 @@ for case in cases:
       case['judge'] = soup.find('div', {'class': 'doc_author'}).text
     except:
       case['judge'] = 'unknown'
+  
+  case['full_text'] = text
  
   print("Case", case['title'], "processed")
   #input("Continue?")

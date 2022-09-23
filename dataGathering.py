@@ -6,6 +6,7 @@ import json
 from bs4 import BeautifulSoup
 
 k = IndianKanoon()
+OPENAI_API_KEY = "sk-y22uQeOCmvLN03icAMj2dLVpJwZjvyu6u2F69nbt"
 cases = []
 tids = []
 numPagesToSearch = int(input("How many pages of cases do you want to search?\n"))

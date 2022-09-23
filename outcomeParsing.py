@@ -1,6 +1,33 @@
 import json
+import os
+import openai
+
+with open('key.txt', 'r') as f:
+    OPENAI_API_KEY = f.read()
+    
+def GPT_Answer(query, text):
+    ## Call the API key under your account (in a secure way)
+    openai.api_key = OPENAI_API_KEY
+    response = openai.Answer.create(
+    engine="text-davinci-002",
+    prompt =  query+'\nTranscript: '+text+'\nResolution: ',
+    temperature = 0.4,
+    top_p = 1,
+    max_tokens = 64,
+    frequency_penalty = 0.5,
+    presence_penalty = 0
+    )
+    return print(response.choices[0].text)
 
 casetexts = json.load(open('cases_with_text.json', 'r'))
+for case in casetexts:    
+    text = case['full_text']
+    query = "Decide whether a court transcript's resolution is a conviction, an acquittal, or neither. Think step by step."
+    res = GPT_Answer(query, text)
+    case['resolution'] = res
+    print("Case", case['title'], ": ", res)
+    input("Continue?")
+
 convited_keys = ['convicted', 'sentenced to']
 acquited_keys = ['acquitted', 'not guilty', 'dismissed', 'thrown out']
 cases = []
