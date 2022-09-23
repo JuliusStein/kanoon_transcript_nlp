@@ -9,17 +9,22 @@ k = IndianKanoon()
 cases = []
 tids = []
 numPagesToSearch = int(input("How many pages of cases do you want to search?\n"))
-queryToSearch = input("What is the query you want to search?\n")
+queryToSearch = input("What is the query you want to search?\n") + " doctypes: judgments"
 # Search for first X pages of sexual assault cases on Kanoon
 for i in range(numPagesToSearch):
   resp = k.search(queryToSearch, i)
+  #print(resp)
+  #input("Continue?")  
   print("Page", i+1, "processed")
   for entry in resp['docs']:
-    case = {}
-    case['title'] = entry['title']
-    case['tid'] = entry['tid']
-    tids.append(entry['tid'])
-    cases.append(case)
+    if entry['tid'] not in tids:
+      case = {}
+      case['title'] = entry['title']
+      case['tid'] = entry['tid']
+      case['court'] = entry['docsource']
+      case['date'] = entry['publishdate']
+      tids.append(entry['tid'])
+      cases.append(case)
 
 #Write the cases to a file
 with open('cases.json', 'w') as f:

@@ -29,7 +29,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk import ngrams
 from nltk import Counter
 
-import seaborn as sns
+import seaborn as 
 
 def word_frequency(sentences):
 # joins all the sentenses
@@ -52,12 +52,6 @@ def word_frequency(sentences):
     return word_freq,word_pairs,trigrams
 
 freq, bi, tri = word_frequency(textlist)
-print(freq.head(10))
-print()
-print(bi.head(10))
-print()
-print(tri.head(10))
-print()
 
 input("Continue to seaborn plots?")
 numResult = int(input("How many results do you want to plot?"))

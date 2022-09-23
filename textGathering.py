@@ -6,6 +6,8 @@ import json
 from bs4 import BeautifulSoup
 
 k = IndianKanoon()
+
+
 # Read the cases from file
 cases = json.load(open('cases.json', 'r'))
 #print(cases)
@@ -19,7 +21,14 @@ for case in cases:
   text = ((' '.join([" ".join(p.text.split()) for p in pTags])).replace('\n', ' ')).replace('\t', ' ')
   case['full_text'] = text
   #print(text)
-  #----------
+  try:
+    case['judge'] = soup.find('div', {'class': 'doc_bench'}).text
+  except:
+    try:
+      case['judge'] = soup.find('div', {'class': 'doc_author'}).text
+    except:
+      case['judge'] = 'unknown'
+ 
   print("Case", case['title'], "processed")
   #input("Continue?")
 
