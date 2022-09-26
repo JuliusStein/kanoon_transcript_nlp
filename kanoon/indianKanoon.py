@@ -15,7 +15,7 @@ class IndianKanoon:
 
   def __init__(self):
     self.base_url = "https://api.indiankanoon.org/"
-    self.auth_token = "0ea7d17df82f0c9206f58113b395f3f28484334a"
+    self.auth_token = "b1038626d4ffb63c6508fbcf8ea9d141e87bd652"
 
     self.headers = {
         'authorization': "Token {}".format(self.auth_token),

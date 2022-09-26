@@ -29,7 +29,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk import ngrams
 from nltk import Counter
 
-import seaborn as 
+import seaborn as sns
 
 def word_frequency(sentences):
 # joins all the sentenses

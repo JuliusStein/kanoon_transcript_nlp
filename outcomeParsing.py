@@ -1,6 +1,19 @@
 import json
 import os
 import openai
+from gtts import gTTS
+from playsound import playsound
+
+
+language = 'en'
+
+
+def saveAndSpeak(response):
+    myobj = gTTS(text=response, lang=language, slow=False)
+    myobj.save("output.mp3")
+    playsound('output.mp3')
+    os.remove("output.mp3")
+
 
 with open('key.txt', 'r') as f:
     OPENAI_API_KEY = f.read()
@@ -8,26 +21,40 @@ with open('key.txt', 'r') as f:
 def GPT_Answer(query, text):
     ## Call the API key under your account (in a secure way)
     openai.api_key = OPENAI_API_KEY
-    response = openai.Answer.create(
-    engine="text-davinci-002",
-    prompt =  query+'\nTranscript: '+text+'\nResolution: ',
-    temperature = 0.4,
-    top_p = 1,
-    max_tokens = 64,
-    frequency_penalty = 0.5,
-    presence_penalty = 0
-    )
-    return print(response.choices[0].text)
+    ## Set the parameters for the API call
+    parameters = {
+        #"engine": "text-davinci-002",
+        "engine": "text-curie-001",
+        #"prompt": query+'\nTranscript: '+text+'\nResolution: ',
+        "prompt": query+'\nTranscript: '+text+'\nThoughts: ',
+        #"prompt": query+'\nTranscript: '+text+'\nThoughts? ',
+        "max_tokens": 64,
+        "temperature": 0.4,
+        "top_p": 1,
+        "frequency_penalty": 0.5,
+        "presence_penalty": 0
+    }
+    response = openai.Completion.create(**parameters)
+    #print(response.choices[0].text)
+    return response.choices[0].text
 
 casetexts = json.load(open('cases_with_text.json', 'r'))
-for case in casetexts:    
-    text = case['full_text']
-    query = "Decide whether a court transcript's resolution is a conviction, an acquittal, or neither. Think step by step."
-    res = GPT_Answer(query, text)
+for i, case in enumerate(casetexts):    
+    sample_text = case['full_text'][:1000] + case['full_text'][-1000:]
+    # Ask gpt3 to determine whether dress was a factor in the case
+    #query = "Did the victim's dress or clothes come up in the case? Answer with yes, maybe, or no."
+    #query = "Decide whether the transcript's resolution is a conviction, an acquittal, or neither. Think step by step and reply in one word."
+    query = "Is the victim's dress mentioned? Reply with yes or no."
+    res = GPT_Answer(query, sample_text)
     case['resolution'] = res
+    
+    saveAndSpeak(res)
     print("Case", case['title'], ": ", res)
-    input("Continue?")
+    
 
+
+#--------------------------------
+# Old approach:
 convited_keys = ['convicted', 'sentenced to']
 acquited_keys = ['acquitted', 'not guilty', 'dismissed', 'thrown out']
 cases = []

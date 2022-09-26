@@ -1,3 +1,4 @@
+from tkinter import N
 import requests
 from urllib.parse import urljoin
 from datetime import datetime
@@ -11,9 +12,9 @@ k = IndianKanoon()
 # Read the cases from file
 cases = json.load(open('cases.json', 'r'))
 #print(cases)
-
+numCases = len(cases)
 # Get the full text of each case
-for case in cases:
+for i, case in enumerate(cases):
   resp = k.doc(case['tid'])
   raw_html = resp['doc']
   soup = BeautifulSoup(raw_html, 'html.parser')
@@ -31,7 +32,7 @@ for case in cases:
   
   case['full_text'] = text
  
-  print("Case", case['title'], "processed")
+  print("Case", i+1, "out of", numCases, "processed")
   #input("Continue?")
 
 #Write the case texts to a file
