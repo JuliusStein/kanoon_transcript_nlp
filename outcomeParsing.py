@@ -4,15 +4,13 @@ import openai
 from gtts import gTTS
 from playsound import playsound
 
-
 language = 'en'
 
-
-def saveAndSpeak(response):
-    myobj = gTTS(text=response, lang=language, slow=False)
-    myobj.save("output.mp3")
-    playsound('output.mp3')
-    os.remove("output.mp3")
+# def saveAndSpeak(response):
+#     myobj = gTTS(text=response, lang=language, slow=False)
+#     myobj.save("output.mp3")
+#     playsound('output.mp3')
+#     os.remove("output.mp3")
 
 
 with open('key.txt', 'r') as f:
@@ -48,10 +46,8 @@ for i, case in enumerate(casetexts):
     res = GPT_Answer(query, sample_text)
     case['resolution'] = res
     
-    saveAndSpeak(res)
+    #saveAndSpeak(res)
     print("Case", case['title'], ": ", res)
-    
-
 
 #--------------------------------
 # Old approach:
