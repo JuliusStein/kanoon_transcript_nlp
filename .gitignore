@@ -130,3 +130,6 @@ dmypy.json
 
 #API Key
 key.txt
+
+#Old JSONs
+stored_data/
