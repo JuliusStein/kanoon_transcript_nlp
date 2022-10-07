@@ -4,7 +4,8 @@ import os
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 
-filename = "audio_analysis\ep1_blanknoise.wav"
+file = input("Enter the file name (p#): ")
+filename = "audio_analysis\\insta\\" + file +".wav"
 
 # create a speech recognition object
 r = sr.Recognizer()
@@ -21,7 +22,7 @@ def get_large_audio_transcription(path):
     # split audio sound where silence is 700 miliseconds or more and get chunks
     chunks = split_on_silence(sound,
         # experiment with this value for your target audio file
-        min_silence_len = 800,
+        min_silence_len = 500,
         # adjust this per requirement
         silence_thresh = sound.dBFS-14,
         # keep the silence for 1 second, adjustable as well
@@ -54,4 +55,8 @@ def get_large_audio_transcription(path):
     return whole_text
 
 text_out = get_large_audio_transcription(filename)
-print(text_out)
+print(text_out[1000:])
+
+#   Write the text to a file
+with open("audio_analysis\\insta\\" + file + "_transcript.txt", "w") as f:
+    f.write(text_out)
